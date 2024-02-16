@@ -4,14 +4,18 @@ import pickle
 import pandas as pd
 
 class Library:
-    def __init__(self) -> None:
+    def __init__(self, name) -> None:
+        self.lib_name = name
+        print(self.lib_name+".lib")
         try:
-            if os.stat("files.gob").st_size == 0:
+            if os.stat(str(name)+".lib").st_size == 0:
                 self.books = pd.DataFrame(columns=['ID','Name','Author','Path','Last_page'])
             else:
-                self.books = pd.read_pickle("files.gob")
+                self.books = pd.read_pickle(str(name)+".lib")
         except FileNotFoundError:
             self.books = pd.DataFrame(columns=['ID','Name','Author','Path','Last_page'])
+            with open(self.lib_name+".lib", 'wb') as file:
+                pickle.dump(self.books, file)
 
     def add_book(self, book):
         id = book.id
@@ -24,19 +28,19 @@ class Library:
             new_entry_df = pd.DataFrame([[id, name, author, path, last_page]], columns=['ID','Name', 'Author', 'Path', 'Last_page'])
             updated_df = pd.concat([self.books, new_entry_df], ignore_index=True)
             
-            with open("files.gob", 'wb') as file:
+            with open(self.lib_name+".lib", 'wb') as file:
                 pickle.dump(updated_df, file)
             print("Entry Successful")
         else:
             print("Book Already exists")
 
     def show_books(self):
-        print(pd.read_pickle('files.gob'))
+        print(pd.read_pickle(self.lib_name+".lib"))
 
     def remove_book(self, book):
         if book.id in self.books["ID"].tolist():
             self.books.drop(self.books[self.books["ID"] == book.id].index, inplace=True)
-            with open("files.gob", 'wb') as file:
+            with open(self.lib_name+".lib", 'wb') as file:
                 pickle.dump(self.books, file)
             print("Deletion Successful")
         else:
@@ -84,10 +88,3 @@ class Book:
 
         except Exception:
             print(Exception)
-
-
-lib = Library()
-lib.add_book(Book("dracula", "bram stoker", "data/Dracula.pdf"))
-lib.add_book(Book("Goosebumps", "r l stine", "data/01 - Welcome to Dead House - R.L. Stine - (BooksWorm.Tk).pdf"))
-print(lib.show_author("R L Stine"))
-lib.show_books()
