@@ -1,0 +1,89 @@
+{# home.html #}
+{% extends 'main.html' %}
+
+{% block content %}
+<div class="search-area">
+    <div class="input">
+        <input class="search" type="text" id="search-box" placeholder="Search A Book" autocomplete="off">
+        <img src="static/icons/search.svg">
+    </div>
+</div>
+
+<main id="main-content">
+    {% if search_term %}
+      {% for book in books %}
+        <div class="container">
+          <div class="inner-containers" id="{{book['ID']}}" onclick="showReader('{{book['ID']}}')">
+            <div class="image-container">
+              <img draggable="false" class="book-image" src="{{ url_for('static', filename='thumbnails/' + book['Image']) }}">
+            </div>
+            <div class="book-details">
+              <p class="name">{{ book['Name'] }}</p>
+              <p class="author">{{ book['Author'] }}</p>
+              <p class="details">{{ book['Date'] }} &#183; {{ book['Genre'] }}</p>
+            </div>
+          </div>
+        </div>
+      {% endfor %}
+    {% else %}
+      {% for book in original_books %}
+        <div class="container">
+          <div class="inner-containers" id="{{book['ID']}}" onclick="showReader('{{book['ID']}}')">
+            <div class="image-container">
+              <img draggable="false" class="book-image" src="{{ url_for('static', filename='thumbnails/' + book['Image']) }}">
+            </div>
+            <div class="book-details">
+              <p class="name">{{ book['Name'] }}</p>
+              <p class="author">{{ book['Author'] }}</p>
+              <p class="details">{{ book['Date'] }} &#183; {{ book['Genre'] }}</p>
+            </div>
+          </div>
+        </div>
+      {% endfor %}
+    {% endif %}
+    
+    <p class="section-title">This Month in Horror</p>
+  </main>
+
+{% endblock %}
+
+{% block scripts %}
+    <script>
+        inputbox = document.getElementById('search-box');
+
+        inputbox.addEventListener('keyup', () => {
+        let input = inputbox.value.trim().toLowerCase();
+
+        if (input.length) {
+            // Create an XMLHttpRequest object
+            const xhr = new XMLHttpRequest();
+            xhr.open("POST", "/home"); // Replace with your actual endpoint
+
+            // Set request headers (optional, but recommended for data format)
+            xhr.setRequestHeader("Content-Type", "application/json");
+
+            // Send the search term as JSON data
+            xhr.send(JSON.stringify({ searchTerm: input }));
+        }
+    })
+        
+    </script>
+
+<script>
+    moveIndicator(document.getElementById('homeBtn'));
+    function moveIndicator(button) {
+        const indicator = document.getElementById('indicator') ;
+        
+        const buttonRect = button.getBoundingClientRect();
+        const navRect = button.parentElement.getBoundingClientRect();
+        const offsetLeft = buttonRect.left - navRect.left;
+        indicator.style.left = offsetLeft + 'px';
+        indicator.style.width = button.offsetWidth + 'px';
+
+    }
+
+    window.addEventListener('resize', () => moveIndicator(document.getElementById('homeBtn')));
+    
+</script>
+
+{% endblock %}

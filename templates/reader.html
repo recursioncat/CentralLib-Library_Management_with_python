@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <link rel="stylesheet" href="{{ url_for('static',filename='reader.css') }}">
+        <title>{{ book_name }}</title>
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Raleway:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+    </head>
+
+    <body>
+        <div class="image-container">
+            <img draggable="false" class="page" src="{{ url_for('static', filename=last_page_image.replace('\\', '/')) }}">
+        </div>
+        <div class="Panel">
+            <div class="title-author">
+                <p class="title">{{ book_name }}</p>
+                <p class="author">{{ book_author }}</p>
+            </div>
+            <div class="panel-bottom">
+                <div class="button-layout">
+                    <div class="button-layout-left">
+                        <form id="resetForm" action="/reset" method="POST">
+                            <input type="hidden" name="book_id" value="{{ book_id }}">
+                            <button class="zoom-button" type="submit">
+                                <img class="zoom" src="{{ url_for('static', filename='icons/icons8-reset-64.png') }}">
+                            </button>
+                        </form>
+                        <form action="/fullscreen" method="POST">
+                            <input type="hidden" name="book_id" value="{{ book_id }}">
+                            <button class="zoom-button" type="submit">
+                                <img class="zoom" src="{{ url_for('static',filename='icons/expand-solid (1).svg') }}">
+                            </button>
+                        </form>
+                    </div>
+                    <div class="page-number">
+                        <form action="/gotopage" method="POST">
+                            <input type="hidden" name="book_id" value="{{ book_id }}" >
+                            <input class="page-selector" name="page" type="text" placeholder="Page no:">
+                        </form>
+                        <p>{{ last_page }}</p>
+                    </div>
+                </div>
+                <input class="plot" type="text" placeholder="Plot" readonly>
+                <button onclick="nextPage('{{ last_page }}')" class="page-turner">Next Page</button>
+                <button onclick="previousPage('{{ last_page }}')" class="page-turner">Previous Page</button>
+            </div>
+        </div>
+
+        <script>
+            function nextPage(page_number){
+                var new_page_number = parseInt(page_number) + 1;
+                var book_id = '{{ book_id }}';
+                window.location.href = "/reader/" + book_id + "/" + new_page_number;
+
+            }
+
+            function previousPage(page_number){
+                if(page_number>1){
+                    var new_page_number = parseInt(page_number) - 1;
+                }
+                else{
+                    new_page_number = page_number;
+                }
+                var book_id = '{{ book_id }}';
+                window.location.href = "/reader/" + book_id + "/" + new_page_number;
+
+            }
+        </script>
+
+    </body>
+</html>

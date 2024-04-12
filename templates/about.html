@@ -1,0 +1,27 @@
+
+{# about.html #}
+{% extends 'main.html' %}
+
+{% block content %}
+hello
+{% endblock %}
+
+
+{% block scripts %}
+<script>
+    moveIndicator(document.getElementById('aboutBtn'));
+
+    function moveIndicator(button) {
+        const indicator = document.getElementById('indicator') ;
+        
+        const buttonRect = button.getBoundingClientRect();
+        const navRect = button.parentElement.getBoundingClientRect();
+        const offsetLeft = buttonRect.left - navRect.left;
+        indicator.style.left = offsetLeft + 'px';
+        indicator.style.width = button.offsetWidth + 'px';
+        
+    }
+
+    window.addEventListener('resize', () => moveIndicator(document.getElementById('aboutBtn')));
+</script>
+{% endblock %}

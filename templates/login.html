@@ -1,0 +1,57 @@
+{# home.html #}
+{% extends 'main.html' %}
+
+{% block content %}
+<div class="body">
+  <h1>Login</h1>
+    <div class="main-container">
+        <form method="POST">
+
+            <div class="username">
+                <input name="username" id="formfield" type="text" class="username-field" autocomplete="off" required>
+                <p class="username-label">Username</p>
+            </div>
+
+            <div class="username">
+                <input name="password" id="password" type="password" class="username-field" autocomplete="off" required>
+                <p class="username-label">Password</p>
+            </div>
+
+            <button class="button" type="submit">Login</button>
+
+        </form>
+    </div>
+    <p class="warning">You Must log in to be able to add a book<br>
+      Please Contact <a href="/">email</a> to sign up.</p>
+
+</div>
+{% endblock %}
+
+
+
+{% block scripts %}
+<script>
+ moveIndicator(document.getElementById('addBookBtn'));
+    function moveIndicator(button) {
+        const indicator = document.getElementById('indicator') ;
+        
+        const buttonRect = button.getBoundingClientRect();
+        const navRect = button.parentElement.getBoundingClientRect();
+        const offsetLeft = buttonRect.left - navRect.left;
+
+        indicator.style.left = offsetLeft + 'px';
+        indicator.style.width = button.offsetWidth + 'px';
+        
+
+    }
+    window.addEventListener('resize', () => moveIndicator(document.getElementById('addBookBtn')));
+    
+</script>
+
+{% if not logged_in and alert %}
+  <script>
+    alert("Wrong Username or Password");
+  </script>
+  {% endif %}
+{% endblock %}
+

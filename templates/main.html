@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" href="{{ url_for('static', filename='main.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='login.css') }}">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
+    <title>Library Homepage</title>
+</head>
+<body>
+    <nav>
+        <button id="homeBtn">Library</button>
+        <button id="addBookBtn">Add Book</button>
+        <button id="aboutBtn">About</button>
+        <div id="indicator"></div>
+    </nav>
+
+    <div class="main-area">
+        {% block content %}
+        {% endblock %}
+    </div>
+
+    <!-- Nav Content Load & Animations -->
+    <script>
+        document.getElementById('homeBtn').addEventListener('click', function() {
+            window.location.href = '/home';
+        });
+        
+        document.getElementById('addBookBtn').addEventListener('click', function() {
+            window.location.href = '/login';
+        });
+        
+        document.getElementById('aboutBtn').addEventListener('click', function() {
+            window.location.href = '/about'
+        });
+        </script>
+
+    <!-- Open Reader -->
+    <script>
+        function showReader(bookId, lastPage) {
+            window.open("/reader/" + bookId + "/" + lastPage, "_blank");
+        }
+    </script>
+
+
+    {% block scripts %}
+    <!-- Default JavaScript code -->
+    {% endblock %}
+
+</body>
+</html>

@@ -1,0 +1,51 @@
+{# Add_Book.html #}
+{% extends 'main.html' %}
+
+{% block content %}
+<form action="/upload_details" method="POST" enctype="multipart/form-data">
+    
+    <input type="file" name="pdf">
+
+    <label>Name</label>
+    <input type="text" name="book_name">
+
+    <label>Author</label>
+    <input type="text" name="author">
+
+    <label>Genre</label>
+    <input type="text" name="genre">
+
+    <label>Date</label>
+    <input type="number" min="1000" max="2024" name="date">
+
+    <label>Thumbnail</label>
+    <input type="file" name="Thumbnail">
+
+    <label>Plot</label>
+    <input type="text">
+
+    <button type="submit">Add Book</button>
+</form>
+{% endblock %}
+
+
+
+{% block scripts %}
+<script>
+ moveIndicator(document.getElementById('addBookBtn'));
+    function moveIndicator(button) {
+        const indicator = document.getElementById('indicator') ;
+        
+        const buttonRect = button.getBoundingClientRect();
+        const navRect = button.parentElement.getBoundingClientRect();
+        const offsetLeft = buttonRect.left - navRect.left;
+
+        indicator.style.left = offsetLeft + 'px';
+        indicator.style.width = button.offsetWidth + 'px';
+        
+
+    }
+    window.addEventListener('resize', () => moveIndicator(document.getElementById('addBookBtn')));
+</script>
+{% endblock %}
+
