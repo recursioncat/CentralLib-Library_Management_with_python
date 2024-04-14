@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html>
 <head>
+    {% block styles %}{% endblock %}
     <link rel="stylesheet" href="{{ url_for('static', filename='main.css') }}">
-    <link rel="stylesheet" href="{{ url_for('static', filename='login.css') }}">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
     <title>Library Homepage</title>
 </head>

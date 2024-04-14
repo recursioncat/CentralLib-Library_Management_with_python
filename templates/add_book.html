@@ -1,36 +1,233 @@
 {# Add_Book.html #}
 {% extends 'main.html' %}
 
+{% block styles %}
+<style>
+    .form{
+        padding: 30px 20px;
+        width: 30vw;
+        border: 1px solid rgb(167, 167, 167);
+        box-sizing: border-box;
+        position: relative;
+        min-width: 340px;
+        row-gap: 20px;
+        }
+
+    input[type="file"]{
+        display: none;
+    }
+
+    .upload-btn{
+        border: none;
+        display: inline-block;
+        padding: 6px 12px;
+        cursor: pointer;
+        background-color: rgb(18, 180, 246);
+        color: #fff;
+        border-radius: 4px;
+        transition: all 0.3s;
+    }
+
+    input{
+        margin-bottom: 10px;
+        width: calc(100% - 6px);
+        padding: 2px;
+        font-size: 20px;
+        border: 1px solid rgb(167, 167, 167);
+    }
+
+    .add-book{
+        width: 100%;
+        padding: 8px 12px;
+        background-color: #3a468b;
+        border: none;
+        color: #fff;
+        border-radius: 4px;
+        font-size: 18px;
+        margin-top: 20px;
+        transition: all 0.3s;
+
+    }
+
+    .row-container{
+        width: 100%;
+    }
+
+    .upload-unit{
+        display: flex;
+        justify-content: space-between;
+        width: 100%;
+        vertical-align: middle;
+        margin-bottom: 20px;
+        height: 31px;
+        font-size: 18px;
+    }
+
+    .upload-unit p{
+        margin-top: 6px;
+    }
+
+
+    .bod{
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        width: calc(100wv - 10px);
+        height: 100vh;
+        position: relative;
+    }
+
+    .heading{
+        position: absolute;
+        top: -15px;
+        left: 13px;
+        background-color: white;
+        font-size: 24px;
+        font-weight: 500;
+        padding: 0px 10px;
+    }
+
+    .upload-btn:hover{
+        box-shadow: 2px 2px 10px rgba(0,0,0,0.3);
+    }
+    .upload-btn:active{
+        opacity: 70%;
+    }
+    .add-book:hover{
+        box-shadow: 2px 2px 10px rgba(0,0,0,0.3);
+    }
+    .add-book:active{
+        opacity: 70%;
+    }
+
+    .logout-div{
+        width: 100%;
+        display: flex;
+        position: absolute;
+        justify-content: space-between;
+        top: 0px;
+        margin-top: 8px;
+    }
+
+    .logout-div p{
+        color: rgb(138, 137, 137);
+        font-size: 16px;
+        margin-top: 5px;
+    }
+
+    .logout-div button{
+        opacity: 70%;
+        background-color: lightgray;
+        font-size: 16px;
+        color: rgb(61, 61, 61);
+        border: none;
+        border-radius: 3px;
+        padding: 5px;
+        font-weight: 600;
+        transition: all 0.3s;
+
+    }
+
+    .logout-div button:hover{
+        box-shadow: 2px 2px 10px rgba(0,0,0,0.3);
+        opacity: 100%;
+        color: white;
+        background-color: rgb(180, 1, 1);
+    }
+
+    .logout-div button:active{
+        opacity: 90%;
+    }
+
+</style>
+{% endblock %}
+
+
 {% block content %}
-<form action="/upload_details" method="POST" enctype="multipart/form-data">
+<div class="bod">
+    <div class="logout-div">
+        <p>Make Sure That You Log Out Once you are done</p>
+        <form action="/logout" method="post">
+            <button>Log Out</button>
+        </form>
+    </div>
+
+    <form class="form" action="/upload_details" method="POST" enctype="multipart/form-data">
+        
     
-    <input type="file" name="pdf">
+        <div class="upload-unit">
+            <p>Choose A Book</p>
+            <div>
+                <label for="pdf" class="upload-btn">Add A PDF</label>
+                <input type="file" name="pdf" id="pdf">
+            </div>
+        </div>
+    
+    
+        <div class="upload-unit">
+            <p>Add A Thumbnail</p>
+            <div>
+                <label for="image" class="upload-btn">Add Picture</label>
+                <input type="file" name="Thumbnail" id="image">
+            </div>
+        </div>
+    
+    
+        <div class="row-container">
+            <label style="display: inline;">Name</label>
+            <input type="text" name="book_name">
+        </div>
+    
+        <div class="row-container">
+            <label>Author</label>
+            <input type="text" name="author">
+        </div>
+    
+        <div class="row-container">
+            <label>Genre</label>
+            <input type="text" name="genre">
+        </div>
+    
+        <div class="row-container">
+            <label>Date</label>
+            <input type="number" min="1000" max="2024" name="date">
+        </div>
+    
+        <div class="row-container">
+            <label>Plot</label>
+            <input type="text">
+        </div>
+    
+        <button class="add-book" type="submit">Add Book</button>
 
-    <label>Name</label>
-    <input type="text" name="book_name">
+        <p class="heading">Add A Book</p>
+    </form>
 
-    <label>Author</label>
-    <input type="text" name="author">
+    <form class="form" action="/delete_book" method="POST">
+    
+        <div class="row-container">
+            <label>Book ID</label>
+            <input name="id" type="text" autocomplete="off">
+        </div>
+    
+        <button class="add-book" type="submit">Remove Book</button>
 
-    <label>Genre</label>
-    <input type="text" name="genre">
-
-    <label>Date</label>
-    <input type="number" min="1000" max="2024" name="date">
-
-    <label>Thumbnail</label>
-    <input type="file" name="Thumbnail">
-
-    <label>Plot</label>
-    <input type="text">
-
-    <button type="submit">Add Book</button>
-</form>
+        <p class="heading">Remove A Book</p>
+    </form>
+</div>
 {% endblock %}
 
 
 
 {% block scripts %}
+
+{% if flash %}
+<script>
+    alert(`{{ flash }}`);
+</script>
+{% endif %}
+
 <script>
  moveIndicator(document.getElementById('addBookBtn'));
     function moveIndicator(button) {
@@ -48,4 +245,3 @@
     window.addEventListener('resize', () => moveIndicator(document.getElementById('addBookBtn')));
 </script>
 {% endblock %}
-

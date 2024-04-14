@@ -1,6 +1,10 @@
 {# home.html #}
 {% extends 'main.html' %}
 
+{% block styles %}
+<link rel="stylesheet" href="{{ url_for('static', filename='login.css') }}">
+{% endblock %}
+
 {% block content %}
 <div class="body">
   <h1>Login</h1>

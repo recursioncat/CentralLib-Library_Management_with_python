@@ -1,74 +1,44 @@
 {# home.html #}
 {% extends 'main.html' %}
 
+
+{% block styles %}
+<link rel="stylesheet" href="{{ url_for('static', filename='home.css') }}">
+{% endblock %}
+
 {% block content %}
-<div class="search-area">
+<form class="search-area" id="search-form" action="/search" method="POST">
     <div class="input">
-        <input class="search" type="text" id="search-box" placeholder="Search A Book" autocomplete="off">
+        <input class="search" type="text" name="Search-Field" value="{{ value }}" id="search-box" placeholder="Search A Book" autocomplete="off">
         <img src="static/icons/search.svg">
     </div>
-</div>
+  </form>
 
+
+{% if empty_search %}
+<p>Sorry! No Such Books Found</p>
+{% else %}
 <main id="main-content">
-    {% if search_term %}
-      {% for book in books %}
-        <div class="container">
-          <div class="inner-containers" id="{{book['ID']}}" onclick="showReader('{{book['ID']}}')">
-            <div class="image-container">
-              <img draggable="false" class="book-image" src="{{ url_for('static', filename='thumbnails/' + book['Image']) }}">
-            </div>
-            <div class="book-details">
-              <p class="name">{{ book['Name'] }}</p>
-              <p class="author">{{ book['Author'] }}</p>
-              <p class="details">{{ book['Date'] }} &#183; {{ book['Genre'] }}</p>
-            </div>
+    {% for book in books %}
+      <div class="container">
+        <div class="inner-containers" id="{{book['ID']}}" onclick="showReader('{{book['ID']}}')">
+          <div class="image-container">
+            <img draggable="false" class="book-image" src="{{ url_for('static', filename='thumbnails/' + book['Image']) }}">
+          </div>
+          <div class="book-details">
+            <p class="name">{{ book['Name'] }}</p>
+            <p class="author">{{ book['Author'] }}</p>
+            <p class="details">{{ book['Date'] }} &#183; {{ book['Genre'] }}</p>
           </div>
         </div>
-      {% endfor %}
-    {% else %}
-      {% for book in original_books %}
-        <div class="container">
-          <div class="inner-containers" id="{{book['ID']}}" onclick="showReader('{{book['ID']}}')">
-            <div class="image-container">
-              <img draggable="false" class="book-image" src="{{ url_for('static', filename='thumbnails/' + book['Image']) }}">
-            </div>
-            <div class="book-details">
-              <p class="name">{{ book['Name'] }}</p>
-              <p class="author">{{ book['Author'] }}</p>
-              <p class="details">{{ book['Date'] }} &#183; {{ book['Genre'] }}</p>
-            </div>
-          </div>
-        </div>
-      {% endfor %}
-    {% endif %}
-    
-    <p class="section-title">This Month in Horror</p>
+      </div>
+    {% endfor %}
+    <p class="section-title">All Books</p>
   </main>
-
+  {% endif %}
 {% endblock %}
 
 {% block scripts %}
-    <script>
-        inputbox = document.getElementById('search-box');
-
-        inputbox.addEventListener('keyup', () => {
-        let input = inputbox.value.trim().toLowerCase();
-
-        if (input.length) {
-            // Create an XMLHttpRequest object
-            const xhr = new XMLHttpRequest();
-            xhr.open("POST", "/home"); // Replace with your actual endpoint
-
-            // Set request headers (optional, but recommended for data format)
-            xhr.setRequestHeader("Content-Type", "application/json");
-
-            // Send the search term as JSON data
-            xhr.send(JSON.stringify({ searchTerm: input }));
-        }
-    })
-        
-    </script>
-
 <script>
     moveIndicator(document.getElementById('homeBtn'));
     function moveIndicator(button) {
@@ -83,6 +53,28 @@
     }
 
     window.addEventListener('resize', () => moveIndicator(document.getElementById('homeBtn')));
+
+    document.addEventListener('DOMContentLoaded', function() {
+        var input = document.getElementById('search-box');
+        input.focus();
+        input.setSelectionRange(input.value.length, input.value.length);
+    });
+
+    var timeoutId;
+    
+    document.getElementById('search-box').addEventListener('input', function() {
+        // Clear the previous timeout, if any
+        clearTimeout(timeoutId);
+
+        // Get the input value
+        var keyword = this.value;
+
+        // Set a new timeout
+        timeoutId = setTimeout(function() {
+            // Submit the form
+            document.getElementById('search-form').submit();
+        }, 500); // Adjust delay as needed
+    });
     
 </script>
 

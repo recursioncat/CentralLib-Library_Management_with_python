@@ -25,23 +25,22 @@ def index():
 
 @app.route('/home', methods=['GET', 'POST'])
 def home():
-  # Default data for initial render
+  global books_df
   books = books_df.books.to_dict('records')
-  original_books = books.copy()  # Assuming you want a copy for full data
-  search_term = ''  # Initialize empty search term
+  return render_template('home.html', books = books)
 
-  if request.method == 'POST':
-    # Handle search term
-    data = request.get_json()
-    search_term = data.get('searchTerm', '').lower()  # Get and lowercase search term
+@app.route('/search', methods = ['POST', 'GET'])
+def search():
+    try:
+        value = request.form.get("Search-Field", "")
+        keyword = value.lower()
+        filtered_books = books_df.books[books_df.books['Name'].str.lower().str.contains(keyword)]
+        books = filtered_books.to_dict('records')
+        empty_search = len(filtered_books) == 0
 
-    # Filter books based on search term (if provided)
-    if search_term:
-      filtered_books = books_df.books[books_df.books['Name'].str.lower().str.contains(search_term)]
-      books = filtered_books.to_dict('records')
-      print(books)
-    return render_template('home.html', books=books, search_term = search_term)  # Pass both variables
-  return render_template('home.html', original_books=original_books, search_term = None)
+        return render_template('home.html', books=books, value = value, empty_search = empty_search)
+    except:
+        return redirect('home.html')
 
 
 @app.route('/login', methods=['GET', 'POST'])
@@ -91,32 +90,56 @@ def upload_details():
     global books_df
     if request.method == "POST":
         if request.files:
-            pdf = request.files["pdf"]
-            pdf.save(os.path.join(app.config['books'], pdf.filename))
             
+            pdf = request.files["pdf"]
             image = request.files["Thumbnail"]
-            image.save(os.path.join(app.config['thumbnails'], image.filename))
 
+            # Handle PDF
+            if not pdf:
+                return render_template("add_book.html", flash = "Please Select a PDF")
+            
+            print(os.path.join(app.config['books'], pdf.filename))
+            pdf.save(os.path.join(app.config['books'], pdf.filename))
 
-            thumb = image.filename
+            # Handle Image
+            if image:
+                print(os.path.join(app.config['thumbnails'], image.filename))
+                image.save(os.path.join(app.config['thumbnails'], image.filename))
+                thumb = image.filename
+            else:
+                thumb = "unknown.jpeg"
+        
+            
             name = request.form["book_name"]
-            author = request.form["author"]
-            id = name[-1:-3:-1]+author[0:2]
+            if not name:
+                return render_template("add_book.html", flash = "Book Name Required")
 
+            author = request.form["author"]
+            if not author:
+                author = "Unknown"
+
+
+            id = name[-1:-3:-1]+author[0:2]
             if id in books_df.books['ID'].tolist():
                 return "File Already Exists"
 
             path = "Server/Books/"+pdf.filename
+            
             genre = request.form["genre"]
+            if not genre:
+                genre = "Unknown/Unclassified"
+
             date = request.form["date"]
+            if not date:
+                date = 0
 
             new_entry_df = Book(name, author, date, path, thumb, genre)
             books_df.add_book(new_entry_df)
             
             books_df.show_books()
-            books_df = Library("Server/New_Library.lib")
+            books_df = Library("New_Library")
 
-    return redirect('/add_book')
+    return render_template("add_book.html", flash = "Book Added Successfully")
 
 
 
@@ -175,9 +198,37 @@ def fullscreen():
         # Handle the case when book_id is not provided
         return "Book ID not provided"
 
+@app.route('/gotopage', methods=['POST'])
+def gotopage():
+    page = request.form.get('page')
+    print(page)
+    book_id = request.form.get('book_id')
+    if page == 1:
+        page = "undefined"
+
+    return redirect(f"/reader/{book_id}/{page}")
 
 
 
+@app.route('/logout', methods = ['GET', 'POST'])
+def logout():
+    global logged_in
+    logged_in = False
+    return redirect('/add_book')
+
+
+@app.route('/delete_book', methods =['GET', 'POST'])
+def delete_book():
+    global books_df
+    id = request.form.get('id')
+    value = books_df.remove_book(id)
+    books_df = Library("New_Library")
+    print(books_df.books)
+    if value == 0:
+        return render_template("add_book.html", flash = "Book Not Found")
+    else:
+        return render_template("add_book.html", flash = "Deleted Successfully")
+    
 
 if __name__ == '__main__':
     app.run(debug=True)

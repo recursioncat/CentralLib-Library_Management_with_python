@@ -45,14 +45,14 @@ class Library:
     def show_books(self):
         print(pd.read_pickle("Server/"+self.lib_name+".lib"))
 
-    def remove_book(self, book):
-        if book.id in self.books["ID"].tolist():
-            self.books.drop(self.books[self.books["ID"] == book.id].index, inplace=True)
-            with open(self.lib_name+".lib", 'wb') as file:
+    def remove_book(self, id):
+        if id in self.books["ID"].tolist():
+            self.books.drop(self.books[self.books["ID"] == id].index, inplace=True)
+            with open("Server/"+self.lib_name+".lib", 'wb') as file:
                 pickle.dump(self.books, file)
-            print("Deletion Successful")
+            return 1
         else:
-            print("Book Not Found")
+            return 0
 
     def path_by_id(self, ID):
         if ID in self.books["ID"].tolist():
@@ -105,7 +105,7 @@ class Book:
 
 
 if __name__=="__main__":
-    # lib1 = Library("New_Library")
+    lib1 = Library("New_Library")
     # goosebumps = Book("Welcome to Dead House", "R.L.Stine", 1995, "Server/Books/01 - Welcome to Dead House - R.L. Stine - (BooksWorm.Tk).pdf", "goosebumps.jpeg", "Horror")
     # dracula = Book("Dracula", "Bram Stoker", 1897, "Server/Books/Dracula.pdf", "dracula.jpg", "Horror")
     # oliver = Book("Oliver Twist", "Charles Dickens", 1831, "Server/Books/oliver-twist.pdf", "oliver-twist.jpg", "Drama")
@@ -116,4 +116,5 @@ if __name__=="__main__":
 
 
     books = pd.read_pickle("Server/New_Library.lib")
+    lib1.remove_book('alBr')
     print(books)
