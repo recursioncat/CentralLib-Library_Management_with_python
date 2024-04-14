@@ -77,12 +77,15 @@ body{
 }
 
 .plot{
-    padding-left: 10px;
+    padding: 10px;
     height:170px;
     border-radius: 6px;
     border: none;
     background-color:rgb(224, 224, 224);
     vertical-align: top;
+    font-size: 18px;
+    color: rgb(105, 104, 104);
+    resize: none;
 }
 
 .page-selector{

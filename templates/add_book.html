@@ -76,6 +76,7 @@
         width: calc(100wv - 10px);
         height: 100vh;
         position: relative;
+        margin-top: 20px;
     }
 
     .heading{
@@ -106,7 +107,7 @@
         display: flex;
         position: absolute;
         justify-content: space-between;
-        top: 0px;
+        top: -20px;
         margin-top: 8px;
     }
 
@@ -138,6 +139,12 @@
 
     .logout-div button:active{
         opacity: 90%;
+    }
+
+    .tex{
+        height:150px;
+        width: calc(100% - 6px) ;
+        resize: none;
     }
 
 </style>
@@ -196,7 +203,7 @@
     
         <div class="row-container">
             <label>Plot</label>
-            <input type="text">
+            <textarea class="tex" name="plot"></textarea>
         </div>
     
         <button class="add-book" type="submit">Add Book</button>

@@ -41,7 +41,7 @@
                         <p>{{ last_page }}</p>
                     </div>
                 </div>
-                <input class="plot" type="text" placeholder="Plot" readonly>
+                <textarea class="plot" readonly>{{ book_plot }}</textarea>
                 <button onclick="nextPage('{{ last_page }}')" class="page-turner">Next Page</button>
                 <button onclick="previousPage('{{ last_page }}')" class="page-turner">Previous Page</button>
             </div>
@@ -51,7 +51,14 @@
             function nextPage(page_number){
                 var new_page_number = parseInt(page_number) + 1;
                 var book_id = '{{ book_id }}';
-                window.location.href = "/reader/" + book_id + "/" + new_page_number;
+
+
+                if (new_page_number>`{{ total_pages }}`){
+                    alert("This is the Last Page.");
+                }
+                else{
+                 window.location.href = "/reader/" + book_id + "/" + new_page_number;
+                }
 
             }
 

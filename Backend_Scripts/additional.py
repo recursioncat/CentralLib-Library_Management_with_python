@@ -1,13 +1,13 @@
 import os, shutil
-from PyPDF2 import PdfReader
+import PyPDF2 
 from pdf2image import convert_from_path
 
 def pdf_to_image(pdf_path, page_number, dpi):
     try:
         with open(pdf_path, 'rb') as f:
-            pdf_reader = PdfReader(f)
+            pdf_reader = PyPDF2.PdfReader(f)
 
-            if page_number < 0 or page_number >= len(pdf_reader.pages):
+            if page_number < 0 or page_number > len(pdf_reader.pages):
                 raise ValueError("Invalid page number")
             
             images = convert_from_path(pdf_path, dpi=dpi, first_page=page_number, last_page=page_number)
@@ -29,3 +29,4 @@ def pdf_to_image(pdf_path, page_number, dpi):
         # Log the error
         print(f"Error converting PDF to image: {e}")
         return None  # Return None to indicate failure
+    
