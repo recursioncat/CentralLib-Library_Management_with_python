@@ -12,6 +12,9 @@ Name
 Author
 Path
 Last_page_read
+Genre
+Total Pages
+Plot
 ```
 more to come
 
@@ -63,8 +66,3 @@ book1 = ("Dracula", "Bram Stoker", "path_to_file")
 book1.open()
 ```
 this will ope the book in your default pdf viewer.
-
-## Whats Coming in the Future
-1. A GUI Based Frontend and Backend
-2. More Search Options
-3. More Book Attributes like Genre and plot
