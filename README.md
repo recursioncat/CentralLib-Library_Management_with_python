@@ -18,7 +18,7 @@ You can quick search a book by its name.
 The App remembers the last page you read in a book and opens it from where you left off. Don't want it? Just press the Reset Button.
 
 ### 5. Sleek and Minimalist Design
-Although the Frontend Design is nothing to ride home about, considerable efforts have been made to create a clutter-free and Smooth User Experience.
+Although the Frontend Design is nothing to ride home about, considerable efforts have been made to create a clutter-free and Smooth User Experience. <br />
 ![uianimation-ezgif com-video-to-gif-converter](https://github.com/recursioncat/CentralLib-Library_Management_with_python/assets/125457882/343dcaf8-a71b-4f9a-a9c6-8383cee8ec14)
 
 
