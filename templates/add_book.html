@@ -28,7 +28,8 @@
         transition: all 0.3s;
     }
 
-    input{
+    input, 
+    .genre-select{
         margin-bottom: 10px;
         width: calc(100% - 6px);
         padding: 2px;
@@ -193,7 +194,13 @@
     
         <div class="row-container">
             <label>Genre</label>
-            <input type="text" name="genre">
+            <select class="genre-select" name="genre">
+                <option value="Drama">Drama</option>
+                <option value="Thriller">Thriller</option>
+                <option value="Horror">Horror</option>
+                <option value="Historical">Historical</option>
+                <option value="Others/Unclassified">Others/Unclassified</option>
+              </select>
         </div>
     
         <div class="row-container">

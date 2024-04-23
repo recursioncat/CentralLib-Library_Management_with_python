@@ -2,8 +2,386 @@
 {# about.html #}
 {% extends 'main.html' %}
 
+{% block styles %}
+<style>
+    .main-area{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    row-gap: 10px;
+}
+
+.About-Container{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    column-gap: 30px;
+    padding: 20px 25px;
+    border-radius: 8px;
+}
+
+.all-about-me h1,
+.all-about-me1 h1{
+    font-family: 'Jersey 10 Charted';
+    font-weight: 400;
+    font-size: 50px;
+    margin-bottom: 20px;
+    margin-top: 0px;
+}
+
+.all-about-me p{
+    font-family: raleway;
+    width: 500px;
+}
+
+.all-about-me,
+.all-about-me1{
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    border: 1px solid rgb(129, 129, 129);
+    width: 900px;
+    padding: 20px 25px;
+}
+
+.socials{
+    display: flex;
+    justify-content: space-around;
+    column-gap: 40px;
+    margin-top: 0px;
+}
+
+.socials img{
+    height: 60px;
+    filter: invert(8%) sepia(76%) saturate(4239%) hue-rotate(244deg) brightness(100%) contrast(104%);
+    transition: all 0.3s;
+}
+
+.git{
+    transform: scale(110%);
+}
+
+.socials img:hover{
+    filter: invert(33%) sepia(10%) saturate(3594%) hue-rotate(208deg) brightness(100%) contrast(92%);
+}
+
+.socials img:active{
+    opacity: 70%;
+}
+
+.thanks-text{
+    text-align: center;
+}
+
+.all-about-me .thanks-text1 {
+    text-align: center;
+    width: 700px;
+}
+
+.spacer{
+    height: 20px;
+}
+
+.img-container{
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        position: relative;
+        margin-top: 10px;
+    }
+
+    .background {
+        height: 200px;
+        width: 300px;
+        border-radius: 60px;
+        border-bottom-left-radius: 50px;
+        background: radial-gradient(circle,  #1C1678, #564ab4);
+        background-size: 300%;
+        /* background-position:top;  */
+        transition: all 2s ease;
+    }
+
+    .background:hover,
+    .me:hover ~.background{
+        background-position: bottom;
+    }
+
+    .background {
+        height: 300px;
+        width: 365px;
+        border-radius: 60px;
+        border-bottom-left-radius: 50px;
+        background: radial-gradient(circle,  #1C1678, #564ab4);
+        background-size: 300%;
+        /* background-position:top;  */
+        transition: all 2s ease;
+    }
+
+    .me{
+        position: absolute;
+        bottom: 0px;
+        left: 45px;
+        height: 400px;
+    }
+
+
+
+    .info_node:hover,
+            .info_node1:hover{
+                box-shadow: 3px 2px 5px rgba(0,0,0,0.3);
+                z-index: 200;
+                transform: scale(102%);
+            }
+
+            #add-a-book:hover .heading-font:nth-child(1) {
+                transform: translateX(-300px);
+                animation: text-slide-left 0.8s ease-in-out 0s forwards;
+            }
+
+            #add-a-book:hover .heading-font:nth-child(2) {
+                transform: translateX(-300px);
+                animation: text-slide-left .8s ease-in-out 0.2s forwards; 
+            }
+
+            #add-a-book:hover .heading-font:nth-child(3) {
+                transform: translateX(-300px);
+                animation: text-slide-left .8s ease-in-out 0.3s forwards; 
+            }
+
+            @keyframes text-slide-left {
+                0%{
+                    transform: translateX(-300px);
+                }
+
+                100%{
+                    transform: translateX(0px);
+                }
+            }
+
+
+            #search:hover .heading-font1:nth-child(1) {
+                transform: translateY(-300px);
+                animation: text-slide-up 0.8s ease-in-out 0s forwards;
+            }
+
+            #search:hover .heading-font1:nth-child(2) {
+                transform: translateY(-300px);
+                animation: text-slide-up 0.7s ease-in-out 0s forwards;
+            }
+            
+            #search:hover .heading-font1:nth-child(3) {
+                transform: translateY(-300px);
+                animation: text-slide-up 0.6s ease-in-out 0s forwards;
+            }
+
+            
+            @keyframes text-slide-up {
+                0%{
+                    transform: translateY(-300px);
+                }
+
+                100%{
+                    transform: translateY(0px);
+                }
+            }
+
+
+            #Filter:hover .heading-font:nth-child(1) {
+                opacity: 0%;
+                animation: display 1.1s ease-in-out 0s forwards;
+            }
+
+            #Filter:hover .heading-font:nth-child(2) {
+                opacity: 0%;
+                animation: display 0.9s ease-in-out 0s forwards;
+            }
+            
+            #Filter:hover .heading-font:nth-child(3) {
+                opacity: 0%;
+                animation: display 0.7s ease-in-out 0s forwards;
+            }
+
+            #Filter:hover .heading-font:nth-child(4) {
+                opacity: 0%;
+                animation: display 0.5s ease-in-out 0s forwards;
+            }
+
+
+            @keyframes display {
+                0%{
+                    opacity: 0%;
+                }
+
+                100%{
+                    opacity: 100%;
+                }
+            }
+
+            #last:hover .heading-font{
+                transform: translateY(-300px);
+                animation: text-slide-up 0.6s ease-in-out 0s forwards;
+            }
+
+            #last:hover .explanation{
+                opacity: 0%;
+                animation: display 0.6s ease-in-out 0.6s forwards;
+            }
+
+            .info_node{
+                display: flex;
+                flex-direction: column;
+                min-height: 150px;
+                border-radius: 5px;
+                justify-content: center;
+                padding: 5px;
+                transition: all 0.3s;
+                overflow: hidden;
+            }
+
+            .info_node1{
+                display: flex;
+                flex-direction: column;
+                min-height: 150px;
+                border-radius: 5px;
+                justify-content: space-between;
+                padding: 5px;
+                transition: all 0.3s;
+                overflow: hidden;
+            }
+
+            .div-col-span-2{
+                grid-column: span 2;
+            }
+
+            .div-row-span-2{
+                grid-column: 3;
+                grid-row-start: 1;
+                grid-row-end: 3;
+            }
+
+            .info-container{
+                display: grid;
+                grid-template-columns: 200px 200px 250px;
+                column-gap: 10px;
+                row-gap: 10px;
+            }
+
+            .purple{
+                background-color: #5d52b2;
+                color: white;
+            }
+
+            .grey{
+                background-color: #46556A;
+                color: white;
+            }
+
+            .light-grey{
+               background-color:#D9D9D9;
+               color: white;
+            }
+
+            .black{
+                background-color: #181E2A;
+                color: white;
+            }
+
+            .heading-font{
+                margin: 0;
+                font-family: 'Bebas Neue';
+                font-size: 38px;
+                margin-left: 10px;
+            }
+
+            .heading-font1{
+                margin: 0;
+                font-family: 'Bebas Neue';
+                font-size: 44px;
+                margin-left: 10px;
+            }
+
+            .explanation{
+                text-align: right;
+                font-family: Raleway;
+                font-size: 24px;
+                color: rgb(209, 209, 209);
+                margin-right: 6px;
+                margin-bottom: 15px;
+            }
+
+</style>
+{% endblock %}
+
 {% block content %}
-hello
+<div class="spacer"></div>
+<div class="all-about-me1">
+    <h1>So What All Can This Thingy Do....?</h1>
+    <div class="info-container">
+
+        <div id="add-a-book" class="info_node div-col-span-2 purple">
+            <P class="heading-font">Add A Book</P>
+            <P class="heading-font">Read A Book</P>
+            <p class="heading-font">Delete A Book</p>
+        </div>
+
+        <div id="search" class="info_node black">
+            <p class="heading-font1">Search in</p> 
+            <p class="heading-font1">Your</p> 
+            <p class="heading-font1">Library</p>
+        </div>
+
+        <div id="Filter" class="info_node light-grey">
+            <p class="heading-font">Filter Books</p> 
+            <p class="heading-font">by your</p>
+            <p class="heading-font">Favorite</p> 
+            <p class="heading-font">Genre </p>
+        </div>
+
+        <div id="last" class="info_node1 div-row-span-2 grey">
+            <p class="heading-font">Continue from where you left off</p>
+            <p class="explanation">The App Remembers the last page that you read in a book</p>
+        </div>
+    </div>
+</div>
+
+
+
+<div class="all-about-me">
+    <h1>Acknowledgements</h1>
+    <P class="thanks-text">Thanks To <b>Biswajit Dey</b> for helping me out with the search functionality. you can check him out <a href="https://github.com/Phinix-BI">here</a>.....he's really cool.</P>
+</div>
+
+<div class="all-about-me">
+    <h1>How was This Website Made</h1>
+    <P class="thanks-text1">This website was made as a full stack development proof-of-concept using HTML and CSS for frontend, Javascript for animations and Functionalities and Flask which is a python based Backend library.</P>
+
+    <P class="thanks-text1">The Core functionality depends on two very basic classes made with vanilla python, one is a "BOOK" class containing the individual details of each book, and other is a "Library" class for storing and organizing those books. Each book has properties associated with it like the path to the pdf file, last read page, path to the thumbnail, etc. Additionally each book has an unique ID. All the book object along with their details are stored in a Library, which reads from a Pandas Dataframe stored in the Server with the pickle module.</P>
+
+    <P class="thanks-text1">When you click on a book, the server page requests the image of the last opened page using that Book's ID, which is handled by python using the PyPDF2 module and sent back to the page and rendered along with the reader UI.</P>            
+</div>
+
+
+<div class="all-about-me">
+    <div class="About-Container">
+        <div class="about-me-text">
+            <h1>But Who is This Son of a Gun?</h1>
+            <p>Here's The thing.....Nobody Knows....Some speculate he is the son of a god Banished from the heavens after he dared questioned their Might. Perhaps he's just an Egomaniac. Ever since his fall He was burdened not with glorious purpose but by his entirely dullard personality and is currently studying BCA at an "OK" University in Kolkata.</p>
+            <p>However his god like wisdom enabled him to learn and understand things so fast that no other mortal could compete. He gained Expertise in python, built all sorts of tools, learnt Frontend Development and then Destroyed Flask by showing it Who's the boss. After months of research we have managed to gain access to some of his socials, they are linked below....</p>
+        </div>
+        <div class="img-container">
+            <img class="me" src="{{ url_for('static', filename='thumbnails/' + 'New Project.png' ) }}" draggable="false">
+            <div class="background"></div>
+        </div>
+    </div>
+
+    <div class="socials">
+        <a href="https://github.com/recursioncat"><img class="git" src="{{ url_for('static', filename='icons/' + 'icons8-github.svg' ) }}" draggable="false"></a>
+        <a href="https://www.instagram.com/i_amrc26/"><img src="{{ url_for('static', filename='icons/' + 'icons8-instagram.svg' ) }}" draggable="false"></a>
+        <a href="https://www.linkedin.com/in/rishit-chakraborty-2956ba304/"><img src="{{ url_for('static', filename='icons/' + 'icons8-linkedin.svg' ) }}" draggable="false"></a>
+    </div>
+
+</div>
 {% endblock %}
 
 

@@ -2,7 +2,7 @@ from flask import Flask, render_template, request, redirect, send_file, url_for,
 import pandas as pd
 from Backend_Scripts.additional import pdf_to_image
 from Backend_Scripts.Basic_Logic import Book, Library  
-import os
+import os, shutil
 
 app = Flask(__name__)
 app.secret_key = 'RI260704'
@@ -27,20 +27,38 @@ def index():
 def home():
   global books_df
   books = books_df.books.to_dict('records')
-  return render_template('home.html', books = books)
+  return render_template('home.html', books = books, genre = "All")
 
 @app.route('/search', methods = ['POST', 'GET'])
 def search():
     try:
-        value = request.form.get("Search-Field", "")
+        genre = "All"
+        value = request.form.get("Search-Field", "").replace("[", "").replace("]", "").replace("\\", "")
         keyword = value.lower()
         filtered_books = books_df.books[books_df.books['Name'].str.lower().str.contains(keyword)]
         books = filtered_books.to_dict('records')
         empty_search = len(filtered_books) == 0
 
-        return render_template('home.html', books=books, value = value, empty_search = empty_search)
-    except:
-        return redirect('home.html')
+        return render_template('home.html', books=books, value = value, empty_search = empty_search, genre = genre)
+    except Exception as e:
+        print(e)
+        return redirect('/home')
+    
+@app.route('/process_genre', methods = ['GET', 'POST'])
+def genre_select():
+    genre = request.form['genre']
+    print(genre)
+    books = Library("New_Library")
+
+    if genre == "All":
+        print("hobba")
+        return redirect("/home")
+    
+    else:
+        filtered_books = books_df.books[books_df.books['Genre']== genre]
+        books = filtered_books.to_dict('records')
+        return render_template('home.html', books=books, empty_search = len(filtered_books) == 0 ,  genre = genre)
+        
 
 
 @app.route('/login', methods=['GET', 'POST'])
@@ -110,7 +128,7 @@ def upload_details():
                 thumb = "unknown.jpeg"
         
             
-            name = request.form["book_name"]
+            name = str(request.form["book_name"]).title()
             if not name:
                 return render_template("add_book.html", flash = "Book Name Required")
 
@@ -126,8 +144,6 @@ def upload_details():
             path = "Server/Books/"+pdf.filename
             
             genre = request.form["genre"]
-            if not genre:
-                genre = "Unknown/Unclassified"
 
             date = request.form["date"]
             if not date:
@@ -167,6 +183,7 @@ def reader(book_id, last_page=None):
         pd.to_pickle(books_df.books, "Server/New_Library.lib")
         print(books_df.books)
 
+        shutil.rmtree("static/Images/")
         last_page_image_path = str(pdf_to_image(book_path, int(last_page), 150))
         return render_template('reader.html', book_id=book_id, last_page_image=last_page_image_path, total_pages =  book_row.iloc[0]['Total_Pages'], last_page=last_page, book_name=book_name, book_author=book_author, books_name=books_df.books['Name'].tolist(), book_plot = book_plot)
     else:

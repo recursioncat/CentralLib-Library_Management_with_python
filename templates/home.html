@@ -7,12 +7,29 @@
 {% endblock %}
 
 {% block content %}
-<form class="search-area" id="search-form" action="/search" method="POST">
-    <div class="input">
-        <input class="search" type="text" name="Search-Field" value="{{ value }}" id="search-box" placeholder="Search A Book" autocomplete="off">
-        <img src="static/icons/search.svg">
+<div class="search-region">
+
+  <form class="search-area" id="search-form" action="/search" method="POST">
+      <div class="input">
+          <input class="search" type="text" name="Search-Field" value="{{ value }}" id="search-box" placeholder="Search A Book" autocomplete="off">
+          <img src="static/icons/search.svg">
+      </div>
+    </form>
+
+    <div class="sort-area">
+      <p>Sort By Genre</p>
+      <form id="genre-form" action="/process_genre" method="post">
+        <select class="genre-select" name="genre">
+          <option value="All" {% if genre == 'All' %} selected {% endif %}>All</option>
+          <option value="Drama" {% if genre == 'Drama' %} selected {% endif %}>Drama</option>
+          <option value="Thriller" {% if genre == 'Thriller' %} selected {% endif %}>Thriller</option>
+          <option value="Horror" {% if genre == 'Horror' %} selected {% endif %}>Horror</option>
+          <option value="Historical" {% if genre == 'Historical' %} selected {% endif %}>Historical</option>
+          <option value="Others/Unclassified" {% if genre == 'Others/Unclassified' %} selected {% endif %}>Others/Unclassified</option>
+        </select>
+      </form>
     </div>
-  </form>
+</div>
 
 
 {% if empty_search %}
@@ -33,12 +50,22 @@
         </div>
       </div>
     {% endfor %}
-    <p class="section-title">All Books</p>
+    <p class="section-title">{{ genre }} Books</p>
   </main>
   {% endif %}
 {% endblock %}
 
 {% block scripts %}
+
+<script type="text/javascript">
+  document.addEventListener('DOMContentLoaded', function(){
+    var genreSelect = document.querySelector('.genre-select');
+    genreSelect.addEventListener('change', function(){
+      document.getElementById('genre-form').submit();
+    });
+  });
+</script>
+
 <script>
     moveIndicator(document.getElementById('homeBtn'));
     function moveIndicator(button) {
@@ -62,7 +89,7 @@
 
     var timeoutId;
     
-    document.getElementById('search-box').addEventListener('input', function() {
+    document.getElementById('search-box').addEventListener('keyup', function() {
         // Clear the previous timeout, if any
         clearTimeout(timeoutId);
 

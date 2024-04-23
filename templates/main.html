@@ -3,13 +3,18 @@
 <head>
     {% block styles %}{% endblock %}
     <link rel="stylesheet" href="{{ url_for('static', filename='main.css') }}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Jersey+10+Charted&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap" rel="stylesheet">
+
     <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
     <title>Library Homepage</title>
 </head>
 <body>
     <nav>
         <button id="homeBtn">Library</button>
-        <button id="addBookBtn">Add Book</button>
+        <button id="addBookBtn">Admin</button>
         <button id="aboutBtn">About</button>
         <div id="indicator"></div>
     </nav>
