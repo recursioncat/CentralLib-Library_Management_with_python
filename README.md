@@ -1,7 +1,7 @@
 Visit The Website [here](recursioncat.pythonanywhere.com)
 
 # CentralLib: Library_Management_with_python
-Introducing CentralLib: a Python-based book library management system. With centralized storage, easy initialization, and essential attributes like ID, Name, and Author, CentralLib simplifies book organization. Create or load libraries, add, remove, and search books effortlessly. Future updates promise a user-friendly GUI, more search options, and additional attributes. CentralLib is your go-to solution for efficient and comprehensive book management.
+CentralLib revolutionizes book management with its intuitive interface and powerful features. Seamlessly read, add, and remove books from a vast library, all while benefiting from centralized storage and admin controls. Easily navigate through genres and swiftly locate your favorite titles with our efficient filtering and quick search functionalities. Never lose your reading progress again with our bookmarking feature, which remembers your last page across devices. Enjoy a clutter-free experience with our minimalist design, prioritizing usability above all else. CentralLib: where simplicity meets sophistication in book management.
 
 ## Features
 ### 1. Your All in One Online Reading Needs
