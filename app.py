@@ -5,7 +5,7 @@ from Backend_Scripts.Basic_Logic import Book, Library
 import os, shutil
 
 app = Flask(__name__)
-app.secret_key = 'RI260704'
+app.secret_key = 'xxxxxxxxxxxxx'
 app.config['books'] = "Server/Books"
 app.config['thumbnails'] = "static/thumbnails"
 users = {'Rishit': '260704'}
