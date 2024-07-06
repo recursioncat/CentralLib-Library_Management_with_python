@@ -1,8 +1,13 @@
-from flask import Flask, render_template, request, redirect, send_file, url_for, jsonify
+from flask import Flask, render_template, request, redirect, send_file, url_for, jsonify, session
 import pandas as pd
 from Backend_Scripts.additional import pdf_to_image
 from Backend_Scripts.Basic_Logic import Book, Library  
 import os, shutil
+import json
+
+
+def to_raw(string):
+    return fr"{string}"
 
 app = Flask(__name__)
 app.secret_key = 'RI260704'
@@ -27,21 +32,27 @@ def index():
 def home():
   global books_df
   books = books_df.books.to_dict('records')
-  return render_template('home.html', books = books, genre = "All")
+  if 'Homepage-alert' in session:
+    alert = session['Homepage-alert']
+  else:
+      alert = ""
+  return render_template('home.html', books = books, genre = "All", alert = alert)
 
 @app.route('/search', methods = ['POST', 'GET'])
 def search():
     try:
         genre = "All"
-        value = request.form.get("Search-Field", "").replace("[", "").replace("]", "").replace("\\", "")
+        value = request.form.get("Search-Field", "")
+        print("What BAckend Recieved: ", value)
         keyword = value.lower()
         filtered_books = books_df.books[books_df.books['Name'].str.lower().str.contains(keyword)]
         books = filtered_books.to_dict('records')
         empty_search = len(filtered_books) == 0
-
+        session['Homepage-alert'] = r""
         return render_template('home.html', books=books, value = value, empty_search = empty_search, genre = genre)
     except Exception as e:
         print(e)
+        session['Homepage-alert'] = r"Please Enter a Valid Name, Do not enter any of the Following: \\, [ , ]"
         return redirect('/home')
     
 @app.route('/process_genre', methods = ['GET', 'POST'])
@@ -93,6 +104,7 @@ def add_book():
 @app.route('/about')
 def about():
     return render_template("about.html")
+
 
 
 
@@ -178,14 +190,18 @@ def reader(book_id, last_page=None):
             last_page = book_row.iloc[0]['Total_Pages']
         book_plot = book_row.iloc[0]['Plot']
 
+        alert = ""
+        if 'Reader-alert' in session:
+            alert = session['Reader-alert']
+        
 
         books_df.books.loc[books_df.books['ID'] == book_id, 'Last_page'] = last_page
         pd.to_pickle(books_df.books, "Server/New_Library.lib")
-        print(books_df.books)
+        # print(books_df.books)
 
         shutil.rmtree("static/Images/")
         last_page_image_path = str(pdf_to_image(book_path, int(last_page), 150))
-        return render_template('reader.html', book_id=book_id, last_page_image=last_page_image_path, total_pages =  book_row.iloc[0]['Total_Pages'], last_page=last_page, book_name=book_name, book_author=book_author, books_name=books_df.books['Name'].tolist(), book_plot = book_plot)
+        return render_template('reader.html', book_id=book_id, last_page_image=last_page_image_path, total_pages =  book_row.iloc[0]['Total_Pages'], last_page=last_page, book_name=book_name, book_author=book_author, books_name=books_df.books['Name'].tolist(), book_plot = book_plot, reader_warning = alert)
     else:
         return "Book not found"
 
@@ -207,21 +223,25 @@ def reset_page():
         # Handle the case when book_id is not provided
         return "Book ID not provided"
 
-@app.route('/fullscreen', methods=['POST'])
-def fullscreen():
-    # Retrieve the book_id from the form data
-    book_id = request.form.get('book_id')
-    path = books_df.books.loc[books_df.books['ID'] == book_id].iloc[0]['Path']
-    page_number = books_df.books.loc[books_df.books['ID'] == book_id].iloc[0]['Last_page']
 
-    # Ensure that the book_id is not None
-    if book_id is not None:        
-        # Send the PDF file to the browser for display
-        url = f"{path}#page={page_number}"
-        return send_file(path, mimetype='application/pdf', as_attachment=False)
-    else:
-        # Handle the case when book_id is not provided
-        return "Book ID not provided"
+@app.route('/fullscreen/<book_id>/<pageno>', methods=['POST', 'GET'])
+def fullscreen(book_id, pageno):
+    if not pageno:
+        pageno = 1
+    book_row = books_df.books[books_df.books['ID'] == book_id]
+    name = book_row.iloc[0]['Name']
+    author = book_row.iloc[0]['Author']
+    total = book_row.iloc[0]['Total_Pages']
+
+    # Retrieve the book_id from the form data
+    path = books_df.books.loc[books_df.books['ID'] == book_id].iloc[0]['Path']
+
+    last_page_image_path = str(pdf_to_image(path, int(pageno), 150))
+    last2_page_image_path = str(pdf_to_image(path, int(pageno)+1, 150))
+    books_df.books.loc[books_df.books['ID'] == book_id, 'Last_page'] = pageno
+
+
+    return render_template('newfullscreen.html', last_page_image_path = last_page_image_path, last2_page_image_path= last2_page_image_path, name=name, author=author, current_page = pageno, next_page = int(pageno)+1, book_id = book_id, total = total)
 
 @app.route('/gotopage', methods=['POST'])
 def gotopage():
@@ -231,9 +251,24 @@ def gotopage():
     if page == 1:
         page = "undefined"
     pages = books_df.books.loc[books_df.books['ID'] == book_id].iloc[0]['Total_Pages']
-    if int(page)>int(pages):
-        return redirect(f"/reader/{book_id}/{pages}")
+    cp = books_df.books.loc[books_df.books['ID'] == book_id].iloc[0]['Last_page']
+    
 
+    try:
+        int(page)
+    except:
+        session['Reader_alert'] = "Invalid Page Number"
+        return redirect(f"/reader/{book_id}/{cp}")
+
+    if int(page)>int(pages):
+        session['Reader-alert'] = "This is the Last Page " + str(pages)
+        return redirect(f"/reader/{book_id}/{pages}")
+    
+    if int(page)<1:
+        session['Reader-alert'] = "Invalid Page Number"
+        return redirect(f"/reader/{book_id}/1")
+
+    session['Reader-alert'] = ""
     return redirect(f"/reader/{book_id}/{page}")
 
 
@@ -256,7 +291,56 @@ def delete_book():
         return render_template("add_book.html", flash = "Book Not Found")
     else:
         return render_template("add_book.html", flash = "Deleted Successfully")
+
+@app.route('/gotopagefullscreen', methods = ['POST'])
+def gotopagefullscreen():
+    book_id = request.form.get('id')
+    book_row = books_df.books[books_df.books['ID'] == book_id]
+    name = book_row.iloc[0]['Name']
+    author = book_row.iloc[0]['Author']
+    total = book_row.iloc[0]['Total_Pages']
+    page = request.form.get('page')
+    last_page = book_row.iloc[0]['Last_page']
+    path = books_df.books.loc[books_df.books['ID'] == book_id].iloc[0]['Path']
+    last_page_image_path = str(pdf_to_image(path, int(last_page), 150))
+    last2_page_image_path = str(pdf_to_image(path, int(last_page)+1, 150))
+
     
+    #if Invalid Page Number
+    try:
+        page = int(page)
+        last_page_image_path = str(pdf_to_image(path, int(page), 150))
+        last2_page_image_path = str(pdf_to_image(path, int(page)+1, 150))
+        books_df.books.loc[books_df.books['ID'] == book_id, 'Last_page'] = page
+    except ValueError:
+        #Send Warning To Socket
+        warning_message = 'Invalid Page Number'
+        return render_template('newfullscreen.html', last_page_image_path = last_page_image_path, last2_page_image_path= last2_page_image_path, name=name, author=author, current_page = last_page, next_page = int(last_page)+1, book_id = book_id, total = total, warning = warning_message)
+
+
+
+
+    if int(page) >= int(total):
+       last_page_image_path = str(pdf_to_image(path, int(total)-1, 150))
+       last2_page_image_path = str(pdf_to_image(path, int(total), 150))
+       warning_message = 'We are at the last Page'
+       books_df.books.loc[books_df.books['ID'] == book_id, 'Last_page'] = total
+       return render_template('newfullscreen.html', last_page_image_path = last_page_image_path, last2_page_image_path= last2_page_image_path, name=name, author=author, current_page = int(total)-1, next_page = int(total), book_id = book_id, total = total, warning = warning_message)
+   
+   
+   
+    if int(page) < 1:
+        last_page_image_path = str(pdf_to_image(path, 1, 150))
+        last2_page_image_path = str(pdf_to_image(path, 2, 150))
+        warning_message = 'Invalid page number, We are at the first page.'
+        books_df.books.loc[books_df.books['ID'] == book_id, 'Last_page']  = 1
+        return render_template('newfullscreen.html', last_page_image_path = last_page_image_path, last2_page_image_path= last2_page_image_path, name=name, author=author, current_page = 1, next_page = 2, book_id = book_id, total = total, warning = warning_message)
+
+
+    return redirect(f'fullscreen/{book_id}/{page}')
+
+
+
 
 if __name__ == '__main__':
     app.run(debug=True)

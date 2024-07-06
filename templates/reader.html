@@ -26,8 +26,9 @@
                                 <img class="zoom" src="{{ url_for('static', filename='icons/icons8-reset-64.png') }}">
                             </button>
                         </form>
-                        <form action="/fullscreen" method="POST">
-                            <input type="hidden" name="book_id" value="{{ book_id }}">
+                        <form action="/fullscreen/{{ book_id }}/{{ last_page }}" method="POST">
+                            <input type="hidden" name="name" value="{{ book_name }}">
+                            <input type="hidden" name="author" value="{{ book_author }}">
                             <button class="zoom-button" type="submit">
                                 <img class="zoom" src="{{ url_for('static',filename='icons/expand-solid (1).svg') }}">
                             </button>
@@ -48,6 +49,10 @@
         </div>
 
         <script>
+            if (`{{reader_warning}}`){
+                alert(`{{reader_warning}}`)
+            }
+
             function nextPage(page_number){
                 var new_page_number = parseInt(page_number) + 1;
                 var book_id = '{{ book_id }}';

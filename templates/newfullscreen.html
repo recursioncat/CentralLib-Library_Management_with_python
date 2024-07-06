@@ -1,0 +1,115 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://kit.fontawesome.com/8677a1a9c2.js" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js" integrity="sha512-q/dWJ3kcmjBLU4Qc47E4A9kTB4m3wuTY7vkFJDTZKjTs8jhyGQnaUrxa0Ytd0ssMZhbNua9hE+E7Qv1j+DyZwA==" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="{{ url_for('static', filename='readerview.css') }}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="pageSection">
+        <div class="leftpage">
+            <img draggable="false" class="page" src="{{ url_for('static', filename=last_page_image_path.replace('\\', '/')) }}">
+        </div>
+        <div class="rightpage">
+            <img draggable="false" class="page" src="{{ url_for('static', filename=last2_page_image_path.replace('\\', '/')) }}">
+        </div>
+    </div>
+    <div class="controls">
+        <div class="backMenu">
+            <a href="/reader/{{ book_id }}/{{ current_page }}">
+                <i class="fa-solid fa-arrow-left backtomain"></i>
+                <p class="pageno">Back to Desktop View</p>
+            </a>
+        </div>
+        <div class="navisland">
+            <div class="navmenu">
+                <i class="fa-solid fa-grip-vertical butt"></i>
+                <i onclick="changePage(`{{ current_page }}`, 'plus')" class="fa-solid fa-arrow-right butt"></i>
+                <i onclick="changePage(`{{ current_page }}`, 'minus')" class="fa-solid fa-arrow-left butt"></i>
+                <i onclick="changePage(`{{ current_page }}`, 'reload')" class="fa-solid fa-rotate-left butt"></i>
+            </div>
+            <div class="title">
+                <p class="bookname">{{ name }}</p>
+                <p class="authorname">{{ author }}</p>
+            </div>
+            <div class="vertseperator"></div>
+            <div class="input-container">
+                <form onsubmit="validateForm();" id="mainForm" method="POST" action="/gotopagefullscreen">
+                    <input type="hidden" name="name" value="{{ name }}">
+                    <input type="hidden" name="author" value="{{ author }}">
+                    <input type="hidden" name="id" value="{{ book_id }}">
+                    <input id="pageval" name="page" placeholder="Go to Page">
+                </form>
+                <i onclick="go()" class="fa-solid fa-arrow-right"></i>
+            </div>
+
+        </div>
+        <p class="pageno">Page No.: {{ current_page }} - {{ next_page }}</p>
+    </div>
+
+    <script src="{{ url_for('static', filename='shortcuts.js' ) }}"></script>
+
+    <script>
+        if(`{{ warning }}`){
+            alert(`{{ warning }}`)
+        }
+
+
+        function go(){
+            const value = document.querySelector('#pageval');
+            if (value.value === ""  || parseInt(value.value)<1){
+                alert("Please Enter a Valid Page Number");
+            }
+            else if(value >= `{{ total }}`) {
+                pageval.value = `{{ total - 1 }}`;
+                document.getElementById('mainForm').submit();
+                alert("We are at the last Page: "+ `{{ total }}`);
+            }
+            else{
+                document.getElementById('mainForm').submit();
+            }
+        }
+
+        function changePage(cp, operation){
+            console.log(cp);
+            let pageno = parseInt(cp);
+
+            if(operation === "plus"){
+                if(pageno >=`{{ total - 1  }}`){
+                    window.location.href = "/fullscreen/"+`{{ book_id }}+"/"+``{{ total - 1 }}`;
+                    alert("We are at the last Page: "+ `{{ total }}`);
+                    return;
+                }
+                window.location.href = "/fullscreen/"+`{{ book_id }}` + "/" + (pageno+1);
+            }
+            else if(operation === "minus"){
+                window.location.href = "/fullscreen/"+`{{ book_id }}` + "/" +(pageno-1);
+            }
+            else if(operation === "reload"){
+                window.location.href = "/fullscreen/"+`{{ book_id }}` + "/" +"1";
+            }
+
+
+        }
+
+        document.addEventListener('keydown', function(event){
+            if(event.keyCode === 39 ){
+                console.log(`{{ current_page }}`);
+                changePage(`{{ current_page }}`, 'plus');
+            }
+
+            else if(event.keyCode === 37){
+                console.log(`{{ current_page }}`);
+                changePage(`{{ current_page }}`, 'minus');
+            }
+        });
+            
+
+    </script>
+</body>
+</html>

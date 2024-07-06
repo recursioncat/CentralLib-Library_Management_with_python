@@ -1,0 +1,114 @@
+
+.container{
+    position: relative;
+    display: flex;
+    justify-content: center;
+}
+
+.book-details{
+    position: absolute;
+    bottom: 0px;
+    width: 165px;
+    padding-top: 10px;
+    padding-left: 5px;
+    color: white;
+    border-bottom-left-radius: 8px ;
+    border-bottom-right-radius: 8px ;
+}
+
+.name{
+    font-size: 20px;
+    margin-bottom: 2px;
+    font-weight: bold;
+    /* width: 95%; */
+    height: 20px;
+    animation: sizeChange 1s 0.3s ease-in-out infinite alternate;
+    min-width: 5px;
+}
+
+@keyframes sizeChange{
+    0%{
+        width: 0%;
+        background-color: rgba(96,96,96, 0.1);
+        
+    }
+
+    100%{
+        width: 95%;
+        background-color: rgba(96,96,96, 0.3);
+    }
+}
+
+
+.author{
+    font-size: 14px;
+    color: rgb(199, 199, 199);
+    margin-bottom: 2px;
+    width: 50%;
+    height: 10px;
+}
+
+.details{
+    font-size: 12px;
+    margin-bottom: 9px;
+    font-size: 12px;
+    color: rgb(199, 199, 199);
+    width: 20%;
+    height: 10px;
+}
+
+
+main{
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+    row-gap: 20px;
+    column-gap: 10px;
+    border: 1px solid rgb(155, 155, 155);
+    padding: 10px;
+    width: 70vw;
+    margin-top: 55px;
+    padding-top: 25px;
+    position: relative;
+    background-color: white;
+}
+
+.inner-containers{
+    width: 170px;
+    height: 200px;
+    transition: all 0.3s;
+    box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+}
+
+
+
+.main-area{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 20px;
+}
+
+.section-title{
+    position: absolute;
+    background-color: white;
+    top:-12px;
+    left: 8px;
+    font-size: 20px;
+    padding: 0 9px;
+    width: 100px;
+    height: 30px;
+
+}
+
+.Skeleton{
+    animation: Skeleton 2s ease-in-out infinite alternate;
+}
+
+@keyframes Skeleton {
+    0%{
+        background-color: rgba(96,96,96, 0.1);
+    }
+    100%{
+        background-color: rgba(96,96,96, 0.3);
+    }
+}
