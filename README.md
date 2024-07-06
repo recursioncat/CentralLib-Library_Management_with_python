@@ -1,70 +1,29 @@
-# CentralLib: Library_Management_with_python
-Introducing CentralLib: a Python-based book library management system. With centralized storage, easy initialization, and essential attributes like ID, Name, and Author, CentralLib simplifies book organization. Create or load libraries, add, remove, and search books effortlessly. Future updates promise a user-friendly GUI, more search options, and additional attributes. CentralLib is your go-to solution for efficient and comprehensive book management.
+Visit The Website [here](recursioncat.pythonanywhere.com)
+
+<center><h1>CentralLib: Library_Management_with_python</h1></center>
+CentralLib revolutionizes book management with its intuitive interface and powerful features. Seamlessly read, add, and remove books from a vast library, all while benefiting from centralized storage and admin controls. Easily navigate through genres and swiftly locate your favorite titles with our efficient filtering and quick search functionalities. Never lose your reading progress again with our bookmarking feature, which remembers your last page across devices. Enjoy a clutter-free experience with our minimalist design, prioritizing usability above all else. CentralLib: where simplicity meets sophistication in book management.
 
 ## Features
-### 1. Centralised Storage
-All Books are stored in a centralised file, which is written to and read every time the library is initialised
-### 2. Several Attributes
-Books have the followng attributes currently:-
-```
-ID
-Name
-Author
-Path
-Last_page_read
-```
-more to come
+### 1. Your All in One Online Reading Needs
+Read, Add and Remove Books from an Everincreasing Library with Admin Contols and Centralised Storage.
+![image](https://github.com/recursioncat/CentralLib-Library_Management_with_python/assets/125457882/e57c25ef-ff9f-402e-b140-d7c3ab391a01)
 
-## How to Use
-### Import the Files
-```
-from Basic_Logic import *
-```
-### Initialize a  Book Object
-The format is `Book(name, author, path_to_pdf)`. For example:
-```
-book1 = Book("Goosebumps", "R.L.Stine", "C://Users/......")
-```
-### Create/Load a Library file and Add your Book 
-You can create a Library file with any name and a .lib extension. This file will store all your book data. If you already have an Existing library you can load it into memory using the same method.
-`var_name = Library(name_of_library_file)`
-for example:-
-```
-lib1 = Library(new_lib) #creates a new new_lib.lib file
-lib2 = Library(old_lib) #load data from already exisiting file old_lib
-```
-Now you can add books (do not forget to convert make a book object)
-```
-lib1.add_book(book1)
-```
+### 2. Filter By Your Favorite Genre
+You can Filter Through the library based on genre to navigate to your favorite titles, by swifty selecting the required option from the drop down menu.
 
-### Remove a Book
-You can remove a book by passing the book object in the `remove_book()` function. for example:
-```
-lib1.remove(book1)
-```
+### 3. Search For that One Book
+You can quick search a book by its name.
 
-### Searching for Books
-You have the ability to search a book by name, by id, or search all the books of an author.
-To search a book by name:<br />
-`lib1.path_by_name(name_of_book)`<br />
-To search by ID:<br />
-`lib1.path_by_id(id_of_book)`<br />
-To search all the Books of a Particular Author:<br />
-`lib1.show_author(name_of_author)`<br />
+### 4. Continue From Where You Left off
+The App remembers the last page you read in a book and opens it from where you left off. Don't want it? Just press the Reset Button.
 
-### See all the books in a library
-Once you are done with the books, you can see the whole library as a dataframe  by using `lib1.show_books()`
+### 5. Sleek and Minimalist Design
+Although the Frontend Design is nothing to ride home about, considerable efforts have been made to create a clutter-free and Smooth User Experience. <br />
+<img align="center" src="https://github.com/recursioncat/CentralLib-Library_Management_with_python/assets/125457882/343dcaf8-a71b-4f9a-a9c6-8383cee8ec14"><br />
 
-### Open a Book as a PDF
-You can open a book as a pdf by calling the `open()` function from the book object.
-```
-book1 = ("Dracula", "Bram Stoker", "path_to_file")
-book1.open()
-```
-this will ope the book in your default pdf viewer.
+## Admin Controls
+The Admin Control Panel provides options to add or remove a book. If you want your favorite book to be added to the library please mail the following details to  [recursioncat26@gmail.com](mailto:recursioncat26@gmail.com?subject=Application%20For%20Library%20Admin)
 
-## Whats Coming in the Future
-1. A GUI Based Frontend and Backend
-2. More Search Options
-3. More Book Attributes like Genre and plot
+
+## How This Works
+The Main Logic is Just 2 basic classes, designed with HTML and CSS and bound together with Javascript and Python's Flask Module. You can Know More about the Technical Details [here](https://recursioncat.pythonanywhere.com/about), under the heading 'How This Website Works.' The Website is currently running on a free server provided by [PythonAnywhere](https://www.pythonanywhere.com/), however this comes with size and speed Limitations.
